@@ -10,8 +10,8 @@ You can customize the variable on your own .env file based on .example.env
 3. you can make your own branch for experimental purpose
 
 # Stack
-BE - Adonis
-DB - MySQL
+- BE Framework - Adonis
+- Databases - MySQL/MongoDB
 
 # Support Link
 Figma : Under Development
