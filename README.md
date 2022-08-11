@@ -14,6 +14,6 @@ You can customize the variable on your own .env file based on .example.env
 - Databases - MySQL/MongoDB
 
 # Support Link
-Figma : Under Development
-Database Structure : Under Development
-Brief Project : [Web-Alumni-Brief-Project.pdf](https://drive.google.com/file/d/1qMKNTlt5f4aaMQgOg3RVHPKr1p4-pdlZ/view?usp=sharing)
+- Figma : Under Development
+- Database Structure : Under Development
+- Brief Project : [Web-Alumni-Brief-Project.pdf](https://drive.google.com/file/d/1qMKNTlt5f4aaMQgOg3RVHPKr1p4-pdlZ/view?usp=sharing)
