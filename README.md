@@ -3,9 +3,7 @@ Main website for alumni JCC
 
 # Check and develop by brach
 1. main -> complete source code
-2. dev-user-fe -> web for user
-3. dev-admin-fe -> web for admin
-4. dev-be -> API endpoint
+2. dev-be -> API endpoint
 
 # Stack
 FE - ReactJS/NextJS
