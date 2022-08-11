@@ -1,12 +1,15 @@
 # alumni-JCC
 Main website for alumni JCC
 
-# Check and develop by brach
-1. main -> complete source code
-2. dev-be -> API endpoint
+# Setup .env through file .example.env
+You can customize the variable on your own .env file based on .example.env
+
+# Check and develop by branch
+1. main -> API completed/existing
+2. dev-be -> API endpoint development
+3. you can make your own branch for experimental purpose
 
 # Stack
-FE - ReactJS/NextJS
 BE - Adonis
 DB - MySQL
 
