@@ -10,14 +10,14 @@ Thanks to [@cahyadsn](https://github.com/cahyadsn) for providing this
 # How to use
 1. Clone the repo
 2. Set Up The ENV Variables
-3. Run the commands:
+3. Execute [wilayah.sql](https://github.com/cahyadsn/wilayah/blob/master/db/wilayah.sql)
+4. Run the commands:
 ```
 npm install
 node ace migration:run
 node ace db:seed
 npm run dev
 ```
-
 
 # Check and develop by branch
 1. main -> API completed/existing
@@ -26,7 +26,7 @@ npm run dev
 
 # Stack
 - BE Framework - Adonis
-- Databases - MySQL/MongoDB
+- Databases - PostgreSQL/CockroachDB
 
 # Support Link
 - Figma : Under Development
