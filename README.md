@@ -3,8 +3,10 @@ Main website for alumni JCC
 
 # Setup .env through file .example.env
 You can customize the variable on your own .env file based on .example.env
-
-
+# Execute wilayah.sql to database
+Table wilayah is required for this project to work.
+You can download the file here [cahyadsn/wilayah]("https://github.com/cahyadsn/wilayah/blob/master/db/wilayah.sql"]
+Thanks to [cahyadsn]("https://github.com/cahyadsn") for providing this
 # How to use
 1. Clone the repo
 2. Set Up The ENV Variables
@@ -13,6 +15,7 @@ You can customize the variable on your own .env file based on .example.env
 npm install
 node ace migration:run
 node ace db:seed
+npm run dev
 ```
 
 

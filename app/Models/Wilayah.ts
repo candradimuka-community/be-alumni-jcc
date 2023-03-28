@@ -5,13 +5,10 @@ export default class Wilayah extends BaseModel {
   public static table = 'wilayah'
 
   @column({ isPrimary: true })
-  public id: string
+  public kode: string
 
   @column()
   public nama: string
-
-  @column()
-  public tingkat: string
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

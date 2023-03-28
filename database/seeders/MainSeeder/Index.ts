@@ -5,6 +5,6 @@ export default class extends BaseSeeder {
     await new Seeder.default(this.client).run()
   }
   public async run() {
-    await this.runSeeder(await import('../Wilayah'))
+    // await this.runSeeder(await import('../Wilayah'))
   }
 }
