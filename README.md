@@ -4,6 +4,18 @@ Main website for alumni JCC
 # Setup .env through file .example.env
 You can customize the variable on your own .env file based on .example.env
 
+
+# How to use
+1. Clone the repo
+2. Set Up The ENV Variables
+3. Run the commands:
+```
+npm install
+node ace migration:run
+node ace db:seed
+```
+
+
 # Check and develop by branch
 1. main -> API completed/existing
 2. dev-be -> API endpoint development
