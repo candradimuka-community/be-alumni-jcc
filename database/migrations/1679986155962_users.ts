@@ -17,6 +17,7 @@ export default class extends BaseSchema {
       table.string('phone', 25)
       table.enum('role', ['admin', 'chairman', 'member'])
       table.string('telegram_user_id')
+      table.string('telegram_user_name')
       table.boolean('is_verified').defaultTo(false)
       table.string('token').comment('untuk reset password')
       table.datetime('token_expired_time', { useTz: false })

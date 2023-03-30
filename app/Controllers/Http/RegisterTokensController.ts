@@ -10,6 +10,8 @@ export default class RegisterTokensController {
   public async store({ request, response }: HttpContextContract) {
     const payload = await request.validate(CreateRegisterTokenValidator)
     const token = generateToken(10)
+
+    //TODO:  hapus token sebelumnya dengan telegramId yang sama
     const data = await RegisterToken.create({
       ...payload,
       token,
