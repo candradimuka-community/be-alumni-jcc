@@ -24,7 +24,9 @@ export default class CreateRegisterTokenValidator {
    *    ```
    */
   public schema = schema.create({
-    telegramUserId: schema.string([rules.minLength(5)]),
+    telegramUserId: schema.string([
+      rules.minLength(5)
+    ]),
     telegramUserName: schema.string([rules.minLength(5)])
   })
 
