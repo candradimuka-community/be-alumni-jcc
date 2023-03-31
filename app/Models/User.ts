@@ -39,10 +39,10 @@ export default class User extends BaseModel {
   @column()
   public isVerified: boolean
 
-  @column()
+  @column({ serializeAs: null })
   public token: string
 
-  @column.dateTime()
+  @column.dateTime({ serializeAs: null })
   public tokenExpiredTime: DateTime
 
   @column()

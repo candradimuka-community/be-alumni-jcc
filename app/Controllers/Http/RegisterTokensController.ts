@@ -11,7 +11,8 @@ export default class RegisterTokensController {
     const payload = await request.validate(CreateRegisterTokenValidator)
     const token = generateToken(10)
 
-    //TODO:  hapus token sebelumnya dengan telegramId yang sama
+    await RegisterToken.query().where('telegramUserId', '=', payload.telegramUserId).delete()
+
     const data = await RegisterToken.create({
       ...payload,
       token,

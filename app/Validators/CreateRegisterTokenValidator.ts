@@ -25,7 +25,8 @@ export default class CreateRegisterTokenValidator {
    */
   public schema = schema.create({
     telegramUserId: schema.string([
-      rules.minLength(5)
+      rules.minLength(5),
+      rules.unique({ table: 'users', column: 'telegram_user_id' })
     ]),
     telegramUserName: schema.string([rules.minLength(5)])
   })
@@ -41,5 +42,7 @@ export default class CreateRegisterTokenValidator {
    * }
    *
    */
-  public messages: CustomMessages = {}
+  public messages: CustomMessages = {
+    'telegramUserId.unique': 'This telegram user has already been registered to the system.'
+  }
 }

@@ -15,7 +15,7 @@ export default class extends BaseSchema {
       table.string('password', 180).notNullable()
       table.string('remember_me_token').nullable()
       table.string('phone', 25)
-      table.enum('role', ['admin', 'chairman', 'member'])
+      table.enum('role', ['admin', 'chairman', 'member']).defaultTo('member')
       table.string('telegram_user_id')
       table.string('telegram_user_name')
       table.boolean('is_verified').defaultTo(false)
