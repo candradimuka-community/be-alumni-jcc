@@ -5,7 +5,7 @@ export default class RegisterToken extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
-  @column()
+  @column({ serializeAs: 'register_token' })
   public token: string
 
   @column()

@@ -28,4 +28,6 @@ Route.get('/wilayah', 'WilayahsController.index')
 Route.post('/token', 'RegisterTokensController.store')
 Route.post('/register', 'AuthController.register')
 Route.get('/verify', 'AuthController.verify')
+Route.post('/resend-verification', 'AuthController.resendVerification')
 Route.post('/login', 'AuthController.login')
+

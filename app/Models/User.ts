@@ -37,13 +37,16 @@ export default class User extends BaseModel {
   public telegramUserId: string
 
   @column()
+  public telegramUserName: string
+
+  @column()
   public isVerified: boolean
 
   @column({ serializeAs: null })
-  public token: string
+  public token: string | null
 
   @column.dateTime({ serializeAs: null })
-  public tokenExpiredTime: DateTime
+  public tokenExpiredTime: DateTime | null
 
   @column()
   public rememberMeToken: string | null

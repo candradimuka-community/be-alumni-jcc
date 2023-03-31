@@ -7,6 +7,7 @@ import { DateTime } from 'luxon'
 import Env from '@ioc:Adonis/Core/Env'
 import { generateToken } from 'App/Helpers/SignUpTokenHelper'
 import Mail from '@ioc:Adonis/Addons/Mail'
+import { schema, rules } from '@ioc:Adonis/Core/Validator'
 
 export default class AuthController {
   public async register({ request, response }: HttpContextContract) {
@@ -21,24 +22,23 @@ export default class AuthController {
     const newToken = generateToken(20)
     payload.token = newToken
     payload['tokenExpiredTime'] = DateTime.now().plus({ minutes: 5 })
+    payload['telegramUserId'] = tokenData.telegramUserId
+    payload['telegramUserName'] = tokenData.telegramUserName
     const data = await User.create(payload)
 
-    await tokenData.delete()
+    await RegisterToken.query().where('telegramUserId', tokenData.telegramUserId).delete()
 
     const host = 'http://' + Env.get('HOST')
     const port = Env.get('PORT') ? ':' + Env.get('PORT') : ''
-    const url = host + port + '/verify?t=' + newToken
+    const verifyUrl = host + port + '/verify?t=' + newToken
 
     await Mail.send((message) => {
       message
         .from('info@example.com')
         .to(payload.email)
         .subject('Welcome Onboard!')
-        // .text(url)
-        .htmlView('emails/welcome', { url })
+        .htmlView('emails/welcome', { verifyUrl })
     })
-
-    //TODO: hapus semua register_token by telegram id karena sudah berhasil
 
     response.created({
       message: "Successfully registered, check your email for verification",
@@ -50,10 +50,13 @@ export default class AuthController {
     const { email, password } = await request.validate(LoginValidator)
     try {
       const token = await auth.use('api').attempt(email, password)
+      if (!auth.user!.isVerified) {
+        return response.unauthorized({ message: "User is not verified, please check email to verify or request for resend verification email" })
+      }
       response.ok({
         message: "Succesfully logged in",
+        token,
         data: auth.user,
-        token
       })
     } catch {
       return response.unauthorized('Invalid credentials')
@@ -63,21 +66,53 @@ export default class AuthController {
   public async verify({ request, response, view }: HttpContextContract) {
     const { t } = request.qs()
     const data = await User.findByOrFail('token', t)
-    if (data.tokenExpiredTime < DateTime.now()) {
+    if (data.tokenExpiredTime != null && data.tokenExpiredTime < DateTime.now()) {
       return response.unprocessableEntity({ message: "Token expired" })
     }
 
-    //TODO: verify user, nullify token & expiry
+    await data.merge({
+      token: null,
+      tokenExpiredTime: null,
+      isVerified: true
+    }).save()
 
-    // response.ok({
-    //   message: "Successfully verified, redirecting to login page"
-    // })
-
-    const html = await view.render('verified')
+    const urlFE = Env.get('URL_FE')
+    const html = await view.render('verified', { urlFE })
     return html
   }
 
-  public async show({ }: HttpContextContract) { }
+  public async resendVerification({ response, request }: HttpContextContract) {
+    const checkEmailSchema = schema.create({
+      email: schema.string([rules.email(), rules.exists({ table: 'users', column: 'email' })])
+    })
+
+    const { email } = await request.validate({ schema: checkEmailSchema })
+
+    const user = await User.findByOrFail('email', email)
+
+    if (user.isVerified) {
+      return response.unprocessableEntity({ message: "User has been verified" })
+    }
+
+    const newToken = generateToken(20)
+    await user.merge({ token: newToken, tokenExpiredTime: DateTime.now().plus({ minutes: 5 }) }).save()
+
+    const host = 'http://' + Env.get('HOST')
+    const port = Env.get('PORT') ? ':' + Env.get('PORT') : ''
+    const verifyUrl = host + port + '/verify?t=' + newToken
+
+    await Mail.send((message) => {
+      message
+        .from('admin@candradimuka.club')
+        .to(email)
+        .subject('Welcome Onboard!')
+        .htmlView('emails/welcome', { verifyUrl })
+    })
+
+    response.created({
+      message: "Successfully registered, check your email for verification"
+    })
+  }
 
   public async edit({ }: HttpContextContract) { }
 
