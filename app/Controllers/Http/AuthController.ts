@@ -12,19 +12,22 @@ import { schema, rules } from '@ioc:Adonis/Core/Validator'
 export default class AuthController {
   public async register({ request, response }: HttpContextContract) {
     const payload = await request.validate(RegisterValidator)
+    let { registerToken, ...payloadData } = payload
 
-    const tokenData = await RegisterToken.findByOrFail('token', payload.token)
+    const tokenData = await RegisterToken.findByOrFail('token', registerToken)
 
     if (tokenData.expiresAt < DateTime.now()) {
       return response.unprocessableEntity({ message: "Token expired" })
     }
 
     const newToken = generateToken(20)
-    payload.token = newToken
-    payload['tokenExpiredTime'] = DateTime.now().plus({ minutes: 5 })
-    payload['telegramUserId'] = tokenData.telegramUserId
-    payload['telegramUserName'] = tokenData.telegramUserName
-    const data = await User.create(payload)
+
+    payloadData['token'] = newToken
+    payloadData['tokenExpiredTime'] = DateTime.now().plus({ minutes: 5 })
+    payloadData['telegramUserId'] = tokenData.telegramUserId
+    payloadData['telegramUserName'] = tokenData.telegramUserName
+
+    const data = await User.create(payloadData)
 
     await RegisterToken.query().where('telegramUserId', tokenData.telegramUserId).delete()
 
@@ -50,13 +53,18 @@ export default class AuthController {
     const { email, password } = await request.validate(LoginValidator)
     try {
       const token = await auth.use('api').attempt(email, password)
-      if (!auth.user!.isVerified) {
+      const { firstName, lastName, middleName, role, isVerified, id } = auth.user!
+      if (!isVerified) {
         return response.unauthorized({ message: "User is not verified, please check email to verify or request for resend verification email" })
       }
       response.ok({
         message: "Succesfully logged in",
         token,
-        data: auth.user,
+        data: {
+          id,
+          name: firstName + " " + middleName + " " + lastName,
+          role,
+        }
       })
     } catch {
       return response.unauthorized('Invalid credentials')
@@ -114,9 +122,8 @@ export default class AuthController {
     })
   }
 
-  public async edit({ }: HttpContextContract) { }
-
-  public async update({ }: HttpContextContract) { }
-
-  public async destroy({ }: HttpContextContract) { }
+  public async logout({ response, auth }: HttpContextContract) {
+    await auth.use('api').logout()
+    response.ok({ message: "Successfully logged out" })
+  }
 }

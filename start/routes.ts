@@ -20,14 +20,24 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.get('/', async () => {
-  return { hello: 'world' }
-})
+Route.group(() => {
 
-Route.get('/wilayah', 'WilayahsController.index')
-Route.post('/token', 'RegisterTokensController.store')
-Route.post('/register', 'AuthController.register')
-Route.get('/verify', 'AuthController.verify')
-Route.post('/resend-verification', 'AuthController.resendVerification')
-Route.post('/login', 'AuthController.login')
+  Route.get('/', async () => {
+    return { hello: 'world' }
+  })
+
+  Route.get('/wilayah', 'WilayahsController.index')
+  Route.post('/token', 'RegisterTokensController.store')
+  Route.post('/register', 'AuthController.register')
+  Route.get('/verify', 'AuthController.verify')
+  Route.post('/resend-verification', 'AuthController.resendVerification')
+  Route.post('/login', 'AuthController.login')
+
+  Route.group(() => {
+
+    Route.post('/logout', 'AuthController.logout')
+    Route.resource('users', 'UsersController').apiOnly().middleware({ 'update': 'restrictRole:member', 'index': 'restrictRole:memxber' })
+  }).middleware('auth')
+
+}).prefix('api')
 

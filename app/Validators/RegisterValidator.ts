@@ -24,7 +24,7 @@ export default class RegisterValidator {
    *    ```
    */
   public schema = schema.create({
-    token: schema.string([rules.exists({ table: 'register_tokens', column: 'token' })]),
+    registerToken: schema.string([rules.exists({ table: 'register_tokens', column: 'token' })]),
     email: schema.string([rules.email(), rules.unique({ table: 'users', column: 'email' })]),
     password: schema.string([rules.confirmed(), rules.minLength(6)]),
     firstName: schema.string([rules.alpha(), rules.trim()]),
