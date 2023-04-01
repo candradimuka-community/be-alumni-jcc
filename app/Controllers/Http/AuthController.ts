@@ -31,9 +31,8 @@ export default class AuthController {
 
     await RegisterToken.query().where('telegramUserId', tokenData.telegramUserId).delete()
 
-    const host = 'http://' + Env.get('HOST')
-    const port = Env.get('PORT') ? ':' + Env.get('PORT') : ''
-    const verifyUrl = host + port + '/verify?t=' + newToken
+    const host =Env.get('HOST_SERVE')
+    const verifyUrl = host + '/verify?t=' + newToken
 
     await Mail.send((message) => {
       message
