@@ -36,7 +36,7 @@ Route.group(() => {
   Route.group(() => {
 
     Route.post('/logout', 'AuthController.logout')
-    Route.resource('users', 'UsersController').apiOnly().middleware({ 'update': 'restrictRole:member', 'index': 'restrictRole:memxber' })
+    Route.resource('users', 'UsersController').apiOnly().middleware({ 'update': 'restrictRole:member', 'index': 'restrictRole:member' })
   }).middleware('auth')
 
 }).prefix('api')
