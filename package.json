@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "postinstall": "node fixKecoa",
     "dev": "node ace serve --watch",
+    "postinstall": "node kecoaFix.js",
     "build": "node ace build --production",
-    "start": "node server.js",
-    "test": "node ace test"
+    "postbuild": "node build/ace migration:run --force",
+    "start": "node build/server.js"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^5.9.5",
