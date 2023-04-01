@@ -6,7 +6,7 @@
     "postinstall": "node fixKecoa",
     "dev": "node ace serve --watch",
     "build": "node ace build --production",
-    "start": "node server.js",
+    "start": "node build/server.js",
     "test": "node ace test"
   },
   "devDependencies": {
