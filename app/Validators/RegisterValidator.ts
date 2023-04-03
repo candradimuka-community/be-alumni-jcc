@@ -32,7 +32,7 @@ export default class RegisterValidator {
     lastName: schema.string([rules.alpha(), rules.trim()]),
     phone: schema.string([rules.regex(/^[0-9]+$/), rules.unique({ table: 'users', column: 'phone' })]),
     birthDate: schema.date({ format: "yyyy-MM-dd" }),
-    birthCity: schema.string([rules.alpha()]),
+    birthCity: schema.string(),
   })
 
   /**
