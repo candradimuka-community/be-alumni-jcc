@@ -12,7 +12,7 @@ import { schema, rules } from '@ioc:Adonis/Core/Validator'
 export default class AuthController {
   public async register({ request, response }: HttpContextContract) {
     const payload = await request.validate(RegisterValidator)
-    let { registerToken, ...payloadData } = payload
+    let { registerToken, feUrl, ...payloadData } = payload
 
     const tokenData = await RegisterToken.findByOrFail('token', registerToken)
 
@@ -26,13 +26,14 @@ export default class AuthController {
     payloadData['tokenExpiredTime'] = DateTime.now().plus({ minutes: 5 })
     payloadData['telegramUserId'] = tokenData.telegramUserId
     payloadData['telegramUserName'] = tokenData.telegramUserName
+    const host = Env.get('HOST_SERVE')
+    let verifyUrl = host + '/api/verify?t=' + newToken
+    if (feUrl) { verifyUrl += '&u=' + feUrl }
 
     const data = await User.create(payloadData)
 
     await RegisterToken.query().where('telegramUserId', tokenData.telegramUserId).delete()
 
-    const host =Env.get('HOST_SERVE')
-    const verifyUrl = host + '/api/verify?t=' + newToken
 
     await Mail.send((message) => {
       message
@@ -49,6 +50,7 @@ export default class AuthController {
   }
 
   public async login({ request, response, auth }: HttpContextContract) {
+    //TODO: handle semua error handling validation
     const { email, password } = await request.validate(LoginValidator)
     try {
       const token = await auth.use('api').attempt(email, password)
@@ -71,7 +73,8 @@ export default class AuthController {
   }
 
   public async verify({ request, response, view }: HttpContextContract) {
-    const { t } = request.qs()
+    const { t, u } = request.qs()
+
     const data = await User.findByOrFail('token', t)
     if (data.tokenExpiredTime != null && data.tokenExpiredTime < DateTime.now()) {
       return response.unprocessableEntity({ message: "Token expired" })
@@ -83,7 +86,7 @@ export default class AuthController {
       isVerified: true
     }).save()
 
-    const urlFE = Env.get('URL_FE')
+    const urlFE = u || Env.get('URL_FE')
     const html = await view.render('verified', { urlFE })
     return html
   }

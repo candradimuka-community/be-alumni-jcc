@@ -33,6 +33,7 @@ export default class RegisterValidator {
     phone: schema.string([rules.regex(/^[0-9]+$/), rules.unique({ table: 'users', column: 'phone' })]),
     birthDate: schema.date({ format: "yyyy-MM-dd" }),
     birthCity: schema.string(),
+    feUrl: schema.string.optional([rules.url()])
   })
 
   /**

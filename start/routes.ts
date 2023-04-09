@@ -34,7 +34,7 @@ Route.group(() => {
   Route.post('/login', 'AuthController.login')
 
   Route.group(() => {
-
+    Route.resource('profile', 'ProfilesController').apiOnly()
     Route.post('/logout', 'AuthController.logout')
     Route.resource('users', 'UsersController').apiOnly().middleware({ 'update': 'restrictRole:member', 'index': 'restrictRole:member' })
   }).middleware('auth')
