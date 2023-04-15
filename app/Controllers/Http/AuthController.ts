@@ -68,7 +68,7 @@ export default class AuthController {
         }
       })
     } catch {
-      return response.unauthorized('Invalid credentials')
+      return response.unauthorized({ message: 'Invalid credentials' })
     }
   }
 

@@ -47,5 +47,9 @@ export default class RegisterValidator {
    * }
    *
    */
-  public messages: CustomMessages = {}
+  public messages: CustomMessages = {
+    exists: 'data not exist in database',
+    unique: 'data duplicate in database',
+    confirmed: 'password does not match'
+  }
 }
